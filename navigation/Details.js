@@ -1,24 +1,61 @@
 import * as React from 'react';
-import { View, Text, StyleSheet, Button } from 'react-native';
-import {Style} from '../style';
+import { View, Text, StyleSheet, Button, Image, Linking} from 'react-native';
+import LinearGradient from 'react-native-linear-gradient';
+import {Title, Card} from 'react-native-paper';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import Entypo from 'react-native-vector-icons/Entypo';
 
-const Details = ({navigation}) => {
-    return(
-        <View>
-            <Text>Details Screen</Text>
-            <Button title='Go To More Screen'
-            onPress={()=>navigation.navigate('More')} color='#0C63E7'/>
-            
-            <Button title='Go To End Screen'
-            onPress={()=>navigation.navigate('End')} color='#0D41E1'/>
+const Details = ({navigation, route}) => {
+    const {karyawan} = route.params
+    return (
+        <View style={{flex:1}}>
+            <LinearGradient colors={['#0033ff','#6bc1ff']} style={{height:'20%'}}/>
+            <View style={{alignItems:'center'}}>
+                <Image style={{width:120, height:120, borderRadius:120/2, marginTop:-50}}
+                source={{uri:karyawan.foto}}/>
+            </View>
 
-            <Button title='Go To Home Screen'
-            onPress={()=>navigation.navigate('Home')} color='#0008C1'/>
+            <View style={{alignItems:'center', margin:15}}>
+                <Title>{karyawan.nama}</Title>
+                <Text style={{fontSize:14}}>{karyawan.jabatan}</Text>
+            </View>
 
-            <Button title='Go To About'
-            onPress={()=>navigation.navigate('About')} color='#07C8F9'/>
+            <Card style={{margin:3}}
+            onPress={()=>{Linking.openURL('mailto:${karyawan.email})')}}>
+                <View style={{flexDirection:'row', padding:8}}>
+                <MaterialIcons name='email' size={32} color='#006aff'/>
+                <Text style={styles.teks}>{karyawan.email}</Text>
+                </View>
+            </Card>
+
+            <Card style={{margin:3}}
+            onPress={()=>{Linking.openURL('tel:${karyawan.telp}')}}>
+                <View style={{flexDirection:'row', padding:8}}>
+                    <Entypo name="email" size={32} color='#006aff'/>
+                    <Text style={styles.teks}>{karyawan.telp}</Text>
+                </View>
+            </Card>
+
+            <Card style={{margin:3}}
+            onPress={()=>{Linking.openURL('tel:${karyawan.gaji}')}}>
+                <View style={{flexDirection:'row', padding:8}}>
+                    <MaterialIcons name="attach-money" size={32} color='#006aff'/>
+                    <Text style={styles.teks}>{karyawan.gaji}</Text>
+                </View>
+            </Card>
+
+            <View style={{padding:10}}>
+                <Button title='GO BACK' onPress={()=>navigation.navigate('Home')}/>
+            </View>
         </View>
-    );
+    )
 }
 
+const styles = StyleSheet.create({
+    teks:{
+        fontSize:15,
+        marginTop:3,
+        marginLeft:5
+    }
+});
 export default Details;

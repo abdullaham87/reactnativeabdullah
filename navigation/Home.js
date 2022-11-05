@@ -1,25 +1,50 @@
 import * as React  from 'react';
-import { View, Text, StyleSheet, Button, Image} from 'react-native';
-import {Style} from '../style';
-
+import { View, Text, StyleSheet, Button, Image, FlatList} from 'react-native';
+import {Card} from 'react-native-paper';
+import Karyawan from '../Karyawan';
 
 const Home = ({navigation}) => {
+    const [data, setData] = React.useState(Karyawan);
+
+    const listKaryawan = ({item}) => {
+        return(
+            <Card style={styles.cardUtama} onPress={()=>navigation.navigate('Details',
+            {karyawan:item})}>
+                <View style={styles.cardView}>
+                    <Image style={{width:50, height:50, borderRadius:50/2}}
+                    source={{uri:item.foto}}/>
+                    <View style={{marginLeft:12}}>
+                        <Text style={styles.teks}>{item.nama}</Text>
+                        <Text style={styles.teks}>{item.jabatan}</Text>
+                    </View>
+                </View>
+            </Card>
+        )
+    }
+
     return (
-        <View>
-            <Text>Home Screen</Text>
-            <Button title='Go To About'
-            onPress={()=>navigation.navigate('About')} color='#07C8F9'/>
-
-            <Button title='Go To Details'
-            onPress={()=>navigation.navigate('Details')} color='#09A6F3'/>
-
-            <Button title='Go To More Screen'
-            onPress={()=>navigation.navigate('More')} color='#0C63E7'/>
-            
-            <Button title='Go To End Screen'
-            onPress={()=>navigation.navigate('End')} color='#0D41E1'/>
+        <View style={{flex:1}}>
+            <FlatList
+            data={data}
+            renderItem={listKaryawan}
+            keyExtractor={item=>item.id}
+            />
         </View>
     );
 }
+
+const styles = StyleSheet.create({
+    cardUtama:{
+        margin:5,
+        shadowColor:'#470000',
+        shadowOffset:{width:0, height:2},
+        shadowOpacity:0.2
+    },
+    cardView:{
+        flexDirection:'row',
+        padding:6
+    },
+    teks:{fontSize:16}
+});
 
 export default Home;
